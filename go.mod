@@ -21,6 +21,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/zhouhui8915/engine.io-go v0.0.0-20150910083302-02ea08f0971f // indirect
 	github.com/zhouhui8915/go-socket.io-client v0.0.0-20200925034401-83ee73793ba4 // indirect
-	golang.org/x/crypto v0.20.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/crypto v0.27.0 // indirect
+	golang.org/x/text v0.18.0 // indirect
 )
