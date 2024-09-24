@@ -65,7 +65,7 @@ func LoginUser(username, password string) error {
 		log.Fatal("Username or Password is incorrect!")
 	}
 
-	fmt.Printf("Login successfully!!, Welcome %v", username)
+	fmt.Printf("Login successfully!!, Welcome %v \n", username)
 
 	return err
 }

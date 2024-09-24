@@ -3,6 +3,7 @@ package cmd
 import (
 	"log"
 
+	"github.com/MingmarGyalzenSherpa44/chat-app/internal/client"
 	"github.com/MingmarGyalzenSherpa44/chat-app/internal/database"
 	"github.com/spf13/cobra"
 )
@@ -20,5 +21,6 @@ var loginCmd = &cobra.Command{
 			log.Fatal("User not found!")
 		}
 
+		client.InitClientConnection(username, password)
 	},
 }

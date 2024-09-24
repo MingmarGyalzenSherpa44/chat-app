@@ -31,5 +31,6 @@ var registerCmd = &cobra.Command{
 		}
 
 		fmt.Printf("User registered successfully!")
+
 	},
 }
