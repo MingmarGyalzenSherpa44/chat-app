@@ -28,12 +28,13 @@ func InitClientConnection(username, password string) {
 		log.Printf("on error\n")
 	})
 
-	client.On("connection", func() {
+	client.On("connect", func() {
 		fmt.Printf("connected\n")
 		log.Printf("on connect\n")
+
 	})
 
-	client.On("msg", func(msg string) {
+	client.On("message", func(msg string) {
 		log.Printf("on message:%v\n", msg)
 
 	})
@@ -46,7 +47,7 @@ func InitClientConnection(username, password string) {
 		data, _, _ := reader.ReadLine()
 		command := string(data)
 
-		client.Emit("msg", username+": "+command)
+		client.Emit("message", username+": "+command)
 		log.Printf("You:%v\n", command)
 	}
 }
