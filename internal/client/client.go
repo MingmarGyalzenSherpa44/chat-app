@@ -9,13 +9,15 @@ import (
 	socketio_client "github.com/zhouhui8915/go-socket.io-client"
 )
 
-func InitClientConnection(username, password string) {
+func InitClientConnection(userId int, username string) {
 
 	opts := &socketio_client.Options{
 		Transport: "websocket",
 		Query:     make(map[string]string),
 	}
 	opts.Query["user"] = username
+	opts.Query["user_id"] = fmt.Sprintf("%v", userId)
+
 	uri := "http://localhost:8000/"
 
 	client, err := socketio_client.NewClient(uri, opts)
@@ -35,7 +37,7 @@ func InitClientConnection(username, password string) {
 	})
 
 	client.On("message", func(msg string) {
-		log.Printf("on message:%v\n", msg)
+		log.Printf("%v\n", msg)
 
 	})
 	client.On("disconnection", func() {
@@ -47,7 +49,6 @@ func InitClientConnection(username, password string) {
 		data, _, _ := reader.ReadLine()
 		command := string(data)
 
-		client.Emit("message", username+": "+command)
-		log.Printf("You:%v\n", command)
+		client.Emit("message", command)
 	}
 }

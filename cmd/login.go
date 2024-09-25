@@ -21,6 +21,8 @@ var loginCmd = &cobra.Command{
 			log.Fatal("User not found!")
 		}
 
-		client.InitClientConnection(username, password)
+		userId := database.GetUserId(username)
+
+		client.InitClientConnection(userId, username)
 	},
 }

@@ -69,3 +69,24 @@ func LoginUser(username, password string) error {
 
 	return err
 }
+
+func GetUserId(username string) int {
+
+	var userId int
+	err := DBConn.QueryRow(context.Background(), "SELECT id FROM users WHERE username = $1", username).Scan(&userId)
+	if err != nil {
+		log.Fatal("Error getting user id")
+	}
+
+	return userId
+
+}
+
+func SaveMessage(userId int, message string) {
+
+	_, err := DBConn.Exec(context.Background(), "INSERT INTO messages (user_id,content) VALUES ($1,$2)", userId, message)
+	if err != nil {
+		log.Fatal("Error saving message")
+	}
+
+}

@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
+	"strconv"
 
+	"github.com/MingmarGyalzenSherpa44/chat-app/internal/database"
 	socketio "github.com/googollee/go-socket.io"
 )
 
@@ -14,30 +17,42 @@ func InitServer() {
 
 	server.OnConnect("/", func(s socketio.Conn) error {
 		s.SetContext("")
-		fmt.Println("connected:", s.ID())
 
 		s.Join("our-room")
-
 		return nil
 	})
 
 	server.OnEvent("/", "message", func(s socketio.Conn, msg string) {
 
-		fmt.Println(msg)
+		//parse query
+		query := s.URL().RawQuery
+		parsedQuery, err := url.ParseQuery(query)
 
-		server.BroadcastToRoom("/", "our-room", "message", msg)
+		if err != nil {
+			log.Fatal("Error parsing query")
+		}
+
+		userId := parsedQuery.Get("user_id")
+		parsedUserId, err := strconv.Atoi(userId)
+		if err != nil {
+			log.Fatal("error parsing user id")
+		}
+		database.SaveMessage(parsedUserId, msg)
+
+		user := parsedQuery.Get("user")
+		fmt.Println(parsedQuery)
+
+		server.BroadcastToRoom("/", "our-room", "message", fmt.Sprintf("%v : %v", user, msg))
 		fmt.Printf("Broadcasted")
 
 	})
 
 	server.OnError("/", func(s socketio.Conn, e error) {
-		// server.Remove(s.ID())
 		fmt.Println("meet error:", e)
 	})
 
 	server.OnDisconnect("/", func(s socketio.Conn, reason string) {
-		// Add the Remove session id. Fixed the connection & mem leak
-		// server.Remove(s.ID())
+
 		s.Leave("our-room")
 		fmt.Println("closed", reason)
 	})
